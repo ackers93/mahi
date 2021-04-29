@@ -10,6 +10,7 @@
       <% if trainee_signed_in? %>
         <li class="nav-item active"><%= link_to 'Home', root_path, :class => 'nav-link' %></li>
         <li class="nav-item"><%= link_to 'Goals', goals_path, :class => 'nav-link' %></li>
+        <li class="nav-item"><%# link_to 'Goal Steps', goal_goal_steps_path, :class => 'nav-link' %></li>
         <li class="nav-item"><%= link_to 'Workouts', root_path, :class => 'nav-link' %></li>
         <li class="nav-item"><%= link_to 'Measure', root_path, :class => 'nav-link' %></li>
         <li class="nav-item"><%= link_to 'My Account', edit_trainee_registration_path, class: 'nav-link' %></li>

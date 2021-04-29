@@ -1,0 +1,32 @@
+<%= form_with(model: @goal.goal_step) do |form| %>
+  <% if goal_step.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(goal_step.errors.count, "error") %> prohibited this goal_step from being saved:</h2>
+
+      <ul>
+        <% goal_step.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :goal_steps_date %>
+    <%= form.date_select :goal_steps_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :goal_id %>
+    <%= form.text_field :goal_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

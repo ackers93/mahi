@@ -1,16 +1,19 @@
 class GoalsController < ApplicationController
-   include Devise::Controllers::Helpers
 
   before_action :authenticate_trainee!
   before_action :set_goal, only: %i[ show edit update destroy ]
 
   # GET /goals or /goals.json
   def index
-    @goals = Goal.all
+    @goals = current_trainee.goals
   end
 
   # GET /goals/1 or /goals/1.json
   def show
+  end
+
+  def show_goal_steps
+    render "goal_steps/index"
   end
 
   # GET /goals/new

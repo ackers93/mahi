@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Goal Steps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Goal steps date</th>
+      <th>Goal</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody> 
+    <% @goal_steps.each do |goal_step| %>
+      <tr>
+        <td><%= goal_step.name %></td>
+        <td><%= goal_step.goal_steps_date %></td>
+        <td><%= goal_step.goal_id %></td>
+        <td><%= link_to 'Show', goal_step %></td>
+        <td><%= link_to 'Edit', edit_goal_step_path(goal_step) %></td>
+        <td><%= link_to 'Destroy', goal_step, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Goal Step', new_goal_step_path %>
