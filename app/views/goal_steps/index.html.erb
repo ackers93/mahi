@@ -18,9 +18,9 @@
         <td><%= goal_step.name %></td>
         <td><%= goal_step.goal_steps_date %></td>
         <td><%= goal_step.goal_id %></td>
-        <td><%= link_to 'Show', goal_step %></td>
-        <td><%= link_to 'Edit', edit_goal_step_path(goal_step) %></td>
-        <td><%= link_to 'Destroy', goal_step, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', goal_goal_step_path(goal_step.goal, goal_step) %></td>
+        <td><%= link_to 'Edit', edit_goal_goal_step_path(goal_step.goal, goal_step) %></td>
+        <td><%= link_to 'Destroy', goal_goal_step_path(goal_step.goal, goal_step), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Goal Step', new_goal_step_path %>
+<%= link_to 'New Goal Step', new_goal_goal_step_path %>
