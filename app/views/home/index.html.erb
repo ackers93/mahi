@@ -1,0 +1,17 @@
+<div class="container">
+  <h1>Welcome to Mahi</h1>
+  
+  <% if user_signed_in? %>
+    <p>Hello, <%= current_user.email %>!</p>
+    <p>
+      <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-danger" %>
+      <%= link_to "Manage 2FA", two_factor_path, class: "btn btn-primary" %>
+    </p>
+  <% else %>
+    <p>
+      <%= link_to "Sign in", new_user_session_path, class: "btn btn-primary" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn btn-secondary" %>
+    </p>
+  <% end %>
+</div>
+

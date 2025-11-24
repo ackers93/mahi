@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: { sessions: "users/sessions" }
+  
+  # Two-factor authentication routes
+  get "two_factor", to: "two_factor#show", as: :two_factor
+  post "two_factor/enable", to: "two_factor#enable", as: :enable_two_factor
+  post "two_factor/disable", to: "two_factor#disable", as: :disable_two_factor
+  
+  # OTP verification routes
+  get "otp_verification/new", to: "otp_verifications#new", as: :new_otp_verification
+  post "otp_verification", to: "otp_verifications#create", as: :otp_verification
+  post "otp_verification/resend", to: "otp_verifications#resend", as: :resend_otp_verification
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -10,5 +22,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "home#index"
 end
