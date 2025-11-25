@@ -1,0 +1,137 @@
+<div class="container">
+  <h1>Record Check-in</h1>
+  <p class="subtitle">Record your current measurements to track progress toward your goals</p>
+
+  <%= form_with model: @body_snapshot, local: true do |form| %>
+    <% if @body_snapshot.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@body_snapshot.errors.count, "error") %> prohibited this check-in from being saved:</h4>
+        <ul>
+          <% @body_snapshot.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :recorded_at, "Date & Time", class: "form-label" %>
+      <%= form.datetime_local_field :recorded_at, class: "form-control" %>
+      <small class="form-text">When did you take these measurements?</small>
+    </div>
+
+    <div class="snapshot-entries">
+      <h3>Measurements</h3>
+      <p class="form-text">Enter values for your goals. You can also add custom metrics not tied to goals.</p>
+
+      <%= form.fields_for :body_snapshot_entries do |entry_form| %>
+        <div class="entry-row">
+          <div class="form-group">
+            <%= entry_form.label :metric_name, "Metric Name", class: "form-label" %>
+            <%= entry_form.text_field :metric_name, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= entry_form.label :measurement_type, "Type", class: "form-label" %>
+            <%= entry_form.text_field :measurement_type, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= entry_form.label :value, "Value", class: "form-label" %>
+            <%= entry_form.number_field :value, step: 0.01, class: "form-control" %>
+          </div>
+        </div>
+      <% end %>
+
+      <div id="entries-container"></div>
+
+      <button type="button" id="add-entry-btn" class="btn btn-secondary">
+        + Add Custom Metric
+      </button>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Save Check-in", class: "btn btn-primary" %>
+      <%= link_to "Cancel", body_goals_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('entries-container');
+    const addBtn = document.getElementById('add-entry-btn');
+    let entryIndex = <%= @body_snapshot.body_snapshot_entries.size %>;
+
+    addBtn.addEventListener('click', function() {
+      const entryHtml = `
+        <div class="entry-row">
+          <div class="form-group">
+            <label class="form-label">Metric Name</label>
+            <input type="text" name="body_snapshot[body_snapshot_entries_attributes][${entryIndex}][metric_name]" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <input type="text" name="body_snapshot[body_snapshot_entries_attributes][${entryIndex}][measurement_type]" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Value</label>
+            <input type="number" step="0.01" name="body_snapshot[body_snapshot_entries_attributes][${entryIndex}][value]" class="form-control" />
+          </div>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', entryHtml);
+      entryIndex++;
+    });
+  });
+</script>
+
+<style>
+  .subtitle {
+    color: #666;
+    margin-bottom: 30px;
+  }
+
+  .snapshot-entries {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .snapshot-entries h3 {
+    margin-bottom: 10px;
+  }
+
+  .entry-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .entry-row .form-group {
+    margin-bottom: 0;
+  }
+
+  #add-entry-btn {
+    margin-top: 10px;
+  }
+
+  .form-text {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+
+  .form-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+  }
+</style>
+
