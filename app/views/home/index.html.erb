@@ -4,8 +4,10 @@
   <% if user_signed_in? %>
     <p>Hello, <%= current_user.email %>!</p>
     <p>
+      <%= link_to "My Body Goals", body_goals_path, class: "btn btn-primary" %>
+      <%= link_to "Record Check-in", new_body_snapshot_path, class: "btn btn-secondary" %>
+      <%= link_to "Manage 2FA", two_factor_path, class: "btn btn-secondary" %>
       <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-danger" %>
-      <%= link_to "Manage 2FA", two_factor_path, class: "btn btn-primary" %>
     </p>
   <% else %>
     <p>

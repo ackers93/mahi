@@ -37,4 +37,8 @@ class User < ApplicationRecord
     return nil unless otp_secret.present?
     OtpService.provisioning_uri(email, otp_secret)
   end
+
+  # Body goals associations
+  has_many :body_goals, dependent: :destroy
+  has_many :body_snapshots, dependent: :destroy
 end

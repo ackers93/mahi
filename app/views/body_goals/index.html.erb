@@ -1,0 +1,241 @@
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h1>My Body Goals</h1>
+    <div>
+      <%= link_to "New Goal", new_body_goal_path, class: "btn btn-primary" %>
+      <%= link_to "Record Check-in", new_body_snapshot_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+
+  <% if @body_goals.any? %>
+    <div class="goals-grid">
+      <% @body_goals.each do |goal| %>
+        <div class="goal-card">
+          <div class="goal-header">
+            <h3><%= goal.metric_name %></h3>
+            <span class="status-badge status-<%= goal.status %>">
+              <%= goal.status.humanize %>
+            </span>
+          </div>
+          
+          <div class="goal-details">
+            <div class="goal-metric">
+              <span class="label">Type:</span>
+              <span class="value"><%= goal.measurement_type %></span>
+            </div>
+            
+            <div class="goal-metric">
+              <span class="label">Target:</span>
+              <span class="value"><%= goal.target_value %></span>
+            </div>
+            
+            <% if goal.current_value %>
+              <div class="goal-metric">
+                <span class="label">Current:</span>
+                <span class="value"><%= goal.current_value %></span>
+              </div>
+              
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: <%= [goal.progress_percentage, 100].min %>%">
+                  <%= number_to_percentage(goal.progress_percentage, precision: 0) %>
+                </div>
+              </div>
+            <% else %>
+              <div class="goal-metric">
+                <span class="label">Status:</span>
+                <span class="value">No check-ins yet</span>
+              </div>
+            <% end %>
+            
+            <div class="goal-metric">
+              <span class="label">Goal Date:</span>
+              <span class="value"><%= goal.goal_date.strftime("%B %d, %Y") %></span>
+            </div>
+            
+            <% if goal.note.present? %>
+              <div class="goal-note">
+                <span class="label">Note:</span>
+                <p><%= goal.note %></p>
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="goal-actions">
+            <%= link_to "Edit", edit_body_goal_path(goal), class: "btn btn-secondary" %>
+            <%= link_to "Delete", body_goal_path(goal), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>You don't have any goals yet. <%= link_to "Create your first goal", new_body_goal_path %> to get started!</p>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .goal-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s;
+  }
+
+  .goal-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .goal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
+  }
+
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .status-done {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .status-almost_there {
+    background-color: #cfe2ff;
+    color: #084298;
+  }
+
+  .status-on_track {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+
+  .status-in_progress {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .status-getting_started {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .status-failed {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .status-pending {
+    background-color: #e2e3e5;
+    color: #383d41;
+  }
+
+  .goal-details {
+    margin-bottom: 15px;
+  }
+
+  .goal-metric {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px 0;
+  }
+
+  .goal-metric .label {
+    font-weight: 500;
+    color: #666;
+  }
+
+  .goal-metric .value {
+    color: #333;
+    font-weight: 600;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+    height: 24px;
+    background-color: #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 15px 0;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: width 0.3s ease;
+  }
+
+  .goal-note {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .goal-note .label {
+    font-weight: 500;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .goal-note p {
+    margin: 0;
+    color: #555;
+    font-style: italic;
+  }
+
+  .goal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .goal-actions .btn {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+  }
+
+  .empty-state p {
+    font-size: 1.1rem;
+  }
+</style>
+
