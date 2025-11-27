@@ -11,7 +11,6 @@ class CreateBodySnapshotEntries < ActiveRecord::Migration[8.1]
       t.timestamps null: false
     end
 
-    add_index :body_snapshot_entries, [:body_snapshot_id, :metric_name]
+    add_index :body_snapshot_entries, [ :body_snapshot_id, :metric_name ]
   end
 end
-
