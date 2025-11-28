@@ -19,7 +19,6 @@
         <%= link_to "New Goal", new_body_goal_path, class: "navbar-link" %>
         <%= link_to "Record Check-in", new_body_snapshot_path, class: "navbar-link" %>
         <div class="navbar-divider"></div>
-        <%= link_to "Manage 2FA", two_factor_path, class: "navbar-link" %>
         <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "navbar-link navbar-link-danger" %>
       <% else %>
         <%= link_to "Sign In", new_user_session_path, class: "navbar-link" %>
