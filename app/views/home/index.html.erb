@@ -1,10 +1,143 @@
-<div class="container">
-  <h1>Welcome to Mahi</h1>
-  
-  <% if user_signed_in? %>
-   
-  <% else %>
-    
-  <% end %>
-</div>
+<% if user_signed_in? %>
+  <%# Dashboard for signed-in users %>
+  <div class="container">
+    <div class="dashboard-header">
+      <h1>Dashboard</h1>
+      <div class="dashboard-actions">
+        <%= link_to "New Goal", new_body_goal_path, class: "btn btn-primary" %>
+        <%= link_to "Record Check-in", new_body_snapshot_path, class: "btn btn-secondary" %>
+      </div>
+    </div>
+
+    <% if @body_goals.any? %>
+      <%# Stats summary %>
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-label">Total Goals</div>
+          <div class="stat-value"><%= current_user.body_goals.count %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Goals</div>
+          <div class="stat-value">
+            <%= current_user.body_goals.select { |g| !["done", "failed"].include?(g.status) }.count %>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value">
+            <%= current_user.body_goals.select { |g| g.status == "done" }.count %>
+          </div>
+        </div>
+      </div>
+
+      <h2>Recent Goals</h2>
+      <div class="goals-grid">
+        <% @body_goals.each do |goal| %>
+          <div class="goal-card">
+            <div class="goal-header">
+              <h3><%= goal.metric_name %></h3>
+              <span class="status-badge status-<%= goal.status %>">
+                <%= goal.status.humanize %>
+              </span>
+            </div>
+            
+            <div class="goal-details">
+              <div class="goal-metric">
+                <span class="label">Type:</span>
+                <span class="value"><%= goal.measurement_type %></span>
+              </div>
+              
+              <div class="goal-metric">
+                <span class="label">Target:</span>
+                <span class="value"><%= goal.target_value %></span>
+              </div>
+              
+              <% if goal.current_value %>
+                <div class="goal-metric">
+                  <span class="label">Current:</span>
+                  <span class="value"><%= goal.current_value %></span>
+                </div>
+                
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: <%= [goal.progress_percentage, 100].min %>%">
+                    <%= number_to_percentage(goal.progress_percentage, precision: 0) %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="goal-metric">
+                  <span class="label">Status:</span>
+                  <span class="value">No check-ins yet</span>
+                </div>
+              <% end %>
+              
+              <div class="goal-metric">
+                <span class="label">Goal Date:</span>
+                <span class="value"><%= goal.goal_date.strftime("%B %d, %Y") %></span>
+              </div>
+            </div>
+            
+            <div class="goal-actions">
+              <%= link_to "View Details", body_goals_path, class: "btn btn-secondary" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if current_user.body_goals.count > 6 %>
+        <div style="text-align: center; margin-top: 30px;">
+          <%= link_to "View All Goals", body_goals_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="empty-state">
+        <h2>Welcome to Mahi!</h2>
+        <p>You don't have any goals yet. Start your fitness journey by creating your first body goal.</p>
+        <div style="margin-top: 30px;">
+          <%= link_to "Create Your First Goal", new_body_goal_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <%# Landing page for non-signed-in users %>
+  <div class="container">
+    <div class="landing-hero">
+      <h1>Mahi</h1>
+      <p>Track your body goals, record check-ins, and achieve your fitness milestones. Your personal journey to a healthier you starts here.</p>
+      <div class="cta-buttons">
+        <%= link_to "Get Started", new_user_registration_path, class: "btn btn-primary", style: "background: white; color: #667eea; font-size: 1.1rem; padding: 12px 30px;" %>
+        <%= link_to "Sign In", new_user_session_path, class: "btn", style: "background: rgba(255,255,255,0.2); color: white; border: 2px solid white; font-size: 1.1rem; padding: 12px 30px;" %>
+      </div>
+    </div>
+
+    <div class="landing-features">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Set Goals</h3>
+        <p>Define your body goals with specific metrics, target values, and deadlines. Track weight loss, muscle gain, measurements, and more.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Track Progress</h3>
+        <p>Record regular check-ins to monitor your progress. Visual progress bars and status indicators help you stay motivated.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure & Private</h3>
+        <p>Your data is protected with secure authentication and two-factor authentication options. Your journey, your privacy.</p>
+      </div>
+    </div>
+
+    <div class="landing-cta">
+      <h2>Ready to Start Your Journey?</h2>
+      <p>Join Mahi today and take the first step towards achieving your body goals.</p>
+      <div class="cta-buttons">
+        <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn-primary" %>
+        <%= link_to "Learn More", "#", class: "btn btn-secondary" %>
+      </div>
+    </div>
+  </div>
+<% end %>
 
