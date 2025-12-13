@@ -14,3 +14,4 @@ class CreateBodySnapshotEntries < ActiveRecord::Migration[8.1]
     add_index :body_snapshot_entries, [ :body_snapshot_id, :metric_name ]
   end
 end
+

@@ -9,3 +9,4 @@ class BodySnapshot < ApplicationRecord
   accepts_nested_attributes_for :body_snapshot_entries, allow_destroy: true, reject_if: :all_blank
 end
 
+

@@ -8,3 +8,4 @@ class BodySnapshotEntry < ApplicationRecord
   validates :value, presence: true, numericality: true
 end
 
+
